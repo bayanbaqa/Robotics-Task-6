@@ -1,0 +1,49 @@
+#include <LiquidCrystal.h>
+#define trigger 8
+#include <Servo.h>
+
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+int the_time = 0, the_distance = 0;
+Servo mys;
+int pos;
+void setup()
+{
+  mys.attach(12);
+  lcd.begin(16, 2);
+  lcd.print(" Robotics Task   ");
+  lcd.setCursor(0, 1);
+  lcd.print("  Bayan Baqa");
+  delay(3000);
+  lcd.clear();
+}
+float microsecondsToCentimeters(float micro_seconds){ 
+  return micro_seconds / 29 / 2;}
+void loop(){
+  pinMode(trigger, OUTPUT);
+  digitalWrite(trigger, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigger, LOW);
+  delayMicroseconds(2);
+  pinMode(trigger, INPUT);
+  the_time = pulseIn(trigger, HIGH);
+  the_distance = microsecondsToCentimeters(the_time);
+  lcd.setCursor(0, 0);
+  lcd.print("Box size :");
+  lcd.setCursor(0, 1);
+  lcd.print("           ");
+  lcd.print(the_distance );
+  lcd.print("cm");
+  delay(1000);
+
+if (the_distance == 10){
+pos=180;
+mys.write(pos);
+delay(1000);}
+
+else if (the_distance == 20){
+pos=90;
+mys.write(pos); }
+delay(1000);
+} 
